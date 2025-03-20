@@ -15,6 +15,10 @@ set(QCA_LIB_MAJOR_VERSION "2")
 set(QCA_LIB_MINOR_VERSION "3")
 set(QCA_LIB_PATCH_VERSION "4")
 
+if (WIN32)
+  cmake_policy(SET CMP0026 OLD)
+endif()
+
 if(POLICY CMP0042)
   cmake_policy(SET CMP0042 OLD)
 endif()
@@ -32,8 +36,6 @@ if(APPLE)
 else()
   set(OSX_FRAMEWORK OFF)
 endif()
-
-find_package(Doxygen)
 
 string(TOLOWER "${BUILD_PLUGINS}" BUILD_PLUGINS)
 if(NOT BUILD_PLUGINS)
@@ -391,17 +393,6 @@ if(BUILD_TESTS)
 endif()
 if(BUILD_TOOLS)
   add_subdirectory(tools)
-endif()
-
-if(DOXYGEN_FOUND)
-  configure_file(${CMAKE_SOURCE_DIR}/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile @ONLY)
-  add_custom_target(doc
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/docs/pics
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/docs/pics/qca-arch.eps ${CMAKE_BINARY_DIR}/docs/pics/qca-arch.eps
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/docs/pics/qca-arch.png ${CMAKE_BINARY_DIR}/docs/pics/qca-arch.png
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen" VERBATIM)
 endif()
 
 include(CMakePackageConfigHelpers)

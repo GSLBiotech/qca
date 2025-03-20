@@ -38,7 +38,9 @@ SafeSocketNotifier::SafeSocketNotifier(int socket, QSocketNotifier::Type type, Q
     : QObject(parent)
 {
     sn = new QSocketNotifier(socket, type, this);
+#ifndef Q_OS_WIN
     connect(sn, &QSocketNotifier::activated, this, &SafeSocketNotifier::activated);
+#endif
 }
 
 SafeSocketNotifier::~SafeSocketNotifier()
